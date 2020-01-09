@@ -1,3 +1,5 @@
+# Install Kafka drivers
+
 apt install librdkafka-dev
 
 export RDK_PREFIX=/usr/local

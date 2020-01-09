@@ -7,8 +7,7 @@ services:
         volumes:
             - ./:/var/www/html
             - ./.docker/logs/nginx:/var/log/nginx
-            # - ./.docker/config/nginx/sites:/etc/nginx/sites-available
-            # - ./config/php-fpm/php.ini:/usr/local/etc/php/php.ini
+            - ./.docker/logs/laravel:/var/www/html/storage/logs
         ports:
             - "80:80"
             - "443:443"
@@ -32,3 +31,21 @@ services:
             - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
             - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
             - ALLOW_PLAINTEXT_LISTENER=yes
+
+    kafka-gui:
+        image: landoop/kafka-topics-ui
+        ports:
+            - 8000:8000
+        environment:
+            - KAFKA_REST_PROXY_URL=http://kafka:9092
+            - PROXY=false
+            - PROXY_SKIP_VERIFY=true
+        depends_on:
+            - kafka
+
+    # kafka-gui:
+    #     image: tchiotludo/kafkahq
+    #     ports:
+    #         - 8080:8080
+    #     volumes:
+    #         - /.docker/config/application.yml:/app/application.yml
